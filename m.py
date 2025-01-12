@@ -2,6 +2,7 @@
 
 import pytz
 import asyncio
+import threading
 
 from pyrogram import Client
 from datetime import datetime, timedelta
@@ -15,8 +16,8 @@ _mongo_async_ = AsyncIOMotorClient("mongodb+srv://MIHIRxKHUSHI:print('MIKU1311')
 TrackDataCol = _mongo_async_["MFBot"]['TrackData']
 
 ACCOUNT = {
-    "session": "BQGMcpgADgmuipxYNJlEza6kOtPAwAH2S22jUyOBOOqzsTkdFnSZnM1S9fHwsHhW7evLIpDqacLHWA9JlJ20PMEQgQJhayMLrtyoIrsRbE-RgG9p37CSMR1kguL78Y9Fi8imk9K2lctNUEffNnNrUTgOD-_ifQh4FZV6lCYr6WI_-MPNq1kQalxj5SjmUHV3nnkaIdVsTfiyroEzYP1AQhxtzoiD5XFPcQVTbK_CKeq8z2QDIMi3vv1F7cNTCZx5PuBUKvPh5xRjm6DJPrdYpelpuersLCmMr1sNv2R0sVoi4d8PKNdbP664qFAiUpRCXbbwPqRmk8Y8QaBga1oU7Pvq-R6n7AAAAAFoWYJIAA",
-    "phone_number": "+919723862655"
+    "session": "BAGMcpgASd4WLRgrZ64zoyXzB35aQ2sojHn7qOIWSzwFcJakUx5woxJXA3t9wYjYyo4EElmpQcEc5riVWcqTdzZcFHzJ-aNBI3Sv-_F2sZUX5yVwrIWAZ9Kb571zxTpLIyV45xwpU-mhixcz95hgcdMcDJmixLxDh4APITOslwIB_UDaqrGJ1Yv2i9WRfJIfG3euE6vnweaYijFn-7ARRFS0Rg2BRhzNE_SdfSPwZ_CZ59OfTt4ETQUD5zBN94CzEgNojuQZkgzZk5l5BmAgOmZMLAdRVp0OcqZsEco0TjUdW5R-UIIDMdHeGAilkhKY26YWcrgbd9tbw5RmZgM1EDLGrMw4QgAAAABpsOo_AA",
+    "phone_number": "+923551044130"
 }
 
 CHATS = {
@@ -43,6 +44,55 @@ CHATS = {
     -1002148525952: "https://t.me/joinchat/Jzyphd-fWPwwZWNl"
 }
 
+class ThreadSafeList(list):
+    def __init__(self, *args):
+        super().__init__(*args)
+        self._lock = threading.Lock()
+
+    def append(self, item):
+        with self._lock:
+            super().append(item)
+
+    def extend(self, iterable):
+        with self._lock:
+            super().extend(iterable)
+
+    def remove(self, item):
+        with self._lock:
+            super().remove(item)
+
+    def pop(self, index=-1):
+        with self._lock:
+            return super().pop(index)
+
+    def clear(self):
+        with self._lock:
+            super().clear()
+
+    def __contains__(self, item):
+        with self._lock:
+            return super().__contains__(item)
+
+    def __iter__(self):
+        with self._lock:
+            return iter(super().copy())
+
+    def __len__(self):
+        with self._lock:
+            return super().__len__()
+
+    def __getitem__(self, index):
+        with self._lock:
+            return super().__getitem__(index)
+
+    def __setitem__(self, index, value):
+        with self._lock:
+            super().__setitem__(index, value)
+
+    def __delitem__(self, index):
+        with self._lock:
+            super().__delitem__(index)
+
 
 class Userbot(Client):
     async def start(self):
@@ -52,6 +102,9 @@ class Userbot(Client):
                 continue
         except:
             pass
+
+
+DATA = ThreadSafeList()
 
 
 async def main():
@@ -88,9 +141,11 @@ async def main():
                             "message_id": message.id,
                             "timestamp": int(message.date.timestamp())
                         }
-                        await TrackDataCol.insert_one(data)
+                        DATA.append(data)
             except Exception as e:
                 print(f"ERROR: {chat_id} {type(e).__name__}")
+            await TrackDataCol.insert_many(DATA)
+            DATA.clear()
             now = datetime.now()
             await asyncio.sleep((60 - now.second) + ((59 - now.minute) * 60))
 
