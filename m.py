@@ -1,10 +1,11 @@
-# 08/01/2025
-
 import pytz
 import asyncio
 import threading
+import logging
 
 from pyrogram import Client
+from pyrogram.errors import UserAlreadyParticipant
+
 from datetime import datetime, timedelta
 from motor.motor_asyncio import AsyncIOMotorClient
 
@@ -16,8 +17,8 @@ _mongo_async_ = AsyncIOMotorClient("mongodb+srv://MIHIRxKHUSHI:print('MIKU1311')
 TrackDataCol = _mongo_async_["MFBot"]['TrackData']
 
 ACCOUNT = {
-    "session": "BAGMcpgASd4WLRgrZ64zoyXzB35aQ2sojHn7qOIWSzwFcJakUx5woxJXA3t9wYjYyo4EElmpQcEc5riVWcqTdzZcFHzJ-aNBI3Sv-_F2sZUX5yVwrIWAZ9Kb571zxTpLIyV45xwpU-mhixcz95hgcdMcDJmixLxDh4APITOslwIB_UDaqrGJ1Yv2i9WRfJIfG3euE6vnweaYijFn-7ARRFS0Rg2BRhzNE_SdfSPwZ_CZ59OfTt4ETQUD5zBN94CzEgNojuQZkgzZk5l5BmAgOmZMLAdRVp0OcqZsEco0TjUdW5R-UIIDMdHeGAilkhKY26YWcrgbd9tbw5RmZgM1EDLGrMw4QgAAAABpsOo_AA",
-    "phone_number": "+923551044130"
+    "session": "BQGMcpgAjY5X0m8kJLmNGGTlpoVz9hoa3GBJfjPQnef6WZkn-rQ4GHPDUrdpGmXeRVop5qjacSU0jBGJd6SyLMZ-OOWJoSQIp2X0KUdIHcI2_gLSqZn8sQKUQ2EDSywYk3h-s0eLVmtakWzHi219srMZ4XWoayZufBqvb-bfCmZlkHn0jnmlYaJ2qti_oMkpx0Y7OPP2e-Z5F2qs8EcQb2TsXzgtijExd7IGEMu3oYG8Mcl2AE0E4iFzlu3wmBW7Uxq_J2Kz3WtzT-u5Ms10jAfHkhLuNZY9vlJVW9tdqKjGh6HT8Gv3HEEjUlGlJ_xbS8LvTnIlo42Ui1OZlaPkslVkluTVFQAAAAHMeMGEAA",
+    "phone_number": "+919761301924"
 }
 
 CHATS = {
@@ -127,6 +128,22 @@ async def main():
             is_not_first = True
 
         for chat_id, chat_link in CHATS.items():
+            # Joining Chat if not Joined
+            try:
+                chat = await app.get_chat(chat_link)
+                await app.get_chat_member(chat_id=chat.id, user_id="me")
+            except:
+                try:
+                    chat = await app.join_chat(chat_link)
+                except UserAlreadyParticipant:
+                    try:
+                        chat = await app.get_chat(chat_link)
+                    except Exception as e:
+                        print(f"Failed to Access: {type(e).__name__} ( {chat_link} )")
+                        continue
+                except Exception as e:
+                    print(f"Failed to Join: {type(e).__name__} ( {chat_link} )")
+                    continue
             previous_day = datetime.now() - timedelta(days=1)
             mcount = 0
             try:
@@ -152,6 +169,8 @@ async def main():
     await app.stop()
     print("USERBOT STOPPED!")
 
+
+logging.getLogger("pyrogram").setLevel(logging.ERROR)
 
 loop = asyncio.get_event_loop()
 loop.run_until_complete(main())
