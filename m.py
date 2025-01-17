@@ -144,6 +144,7 @@ async def main():
                 except Exception as e:
                     print(f"Failed to Join: {type(e).__name__} ( {chat_link} )")
                     continue
+            print(f"RUNNING {chat_id}...  {datetime.now(IST).strftime('%d-%m-%Y %H:%M:%S')}", end=" ")
             previous_day = datetime.now() - timedelta(days=1)
             mcount = 0
             try:
@@ -160,10 +161,11 @@ async def main():
                         }
                         DATA.append(data)
             except Exception as e:
-                print(f"ERROR: {chat_id} {type(e).__name__}")
+                print(f"ERROR_{type(e).__name__}", end=" ")
             if len(DATA) > 0:
                 await TrackDataCol.insert_many(DATA)
                 DATA.clear()
+            print(f"ADDED_{len(DATA)}_DOCS")
             now = datetime.now()
             await asyncio.sleep((60 - now.second) + ((59 - now.minute) * 60))
 
