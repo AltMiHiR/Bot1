@@ -161,8 +161,9 @@ async def main():
                         DATA.append(data)
             except Exception as e:
                 print(f"ERROR: {chat_id} {type(e).__name__}")
-            await TrackDataCol.insert_many(DATA)
-            DATA.clear()
+            if len(DATA) > 0:
+                await TrackDataCol.insert_many(DATA)
+                DATA.clear()
             now = datetime.now()
             await asyncio.sleep((60 - now.second) + ((59 - now.minute) * 60))
 
