@@ -22,9 +22,7 @@ ACCOUNT = {
 }
 
 CHATS = {
-    -1001303959083: "@httpstmejoinchatOltDQhO6Cw",
     -1001170860302: "@MarketStrong",
-    -1001437916508: "@afengiogtobak",
     -1001527007389: "https://t.me/joinchat/TeqEqGaau7UyZTFk",
     -1001469840857: "https://t.me/joinchat/zRL6AlXSWtkzYTFk",
     -1001325622242: "https://t.me/joinchat/dNMbjY4oOwY4OGI0",
@@ -33,7 +31,6 @@ CHATS = {
     -1001320290633: "https://t.me/joinchat/IWC4FxHDbeOVgyLntkEeaQ",
     -1001153450526: "https://t.me/joinchat/J_aD1Jjfft8xNzNk",
     -1001155030078: "https://t.me/joinchat/Kk-O3hRHsvRl-q_uuORacA",
-    -1001424853896: "https://t.me/joinchat/M40bxxNMyvCFkYKTa-LPuA",
     -1001205313235: "https://t.me/joinchat/PmGvgh0v0sJkLoxBe0d3Rg",
     -1001242480702: "https://t.me/joinchat/QcUw8BTnVbPRexXPUA1JlQ",
     -1001214829860: "@CHRISTIANSEXCLUB",
@@ -151,7 +148,7 @@ async def main():
                 async for message in app.search_messages(chat_id=chat_id, min_date=previous_day, max_date=datetime.now()):
                     mcount += 1
                     if mcount % 1000 == 0:
-                        await asyncio.sleep(4)
+                        await asyncio.sleep(3)
                     if message.from_user.id in [5961091462, 277756078, 756558173, 126203394, 108918720]:
                         data = {
                             "user_id": message.from_user.id,
@@ -164,8 +161,10 @@ async def main():
                 print(f"ERROR_{type(e).__name__}", end=" ")
             if len(DATA) > 0:
                 await TrackDataCol.insert_many(DATA)
+                print(f"ADDED_{len(DATA)}_DOCS")
                 DATA.clear()
-            print(f"ADDED_{len(DATA)}_DOCS")
+            else:
+                print("ADDED_0_DOCS")
             now = datetime.now()
             await asyncio.sleep((60 - now.second) + ((59 - now.minute) * 60))
 
