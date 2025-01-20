@@ -149,7 +149,7 @@ async def main():
                     mcount += 1
                     if mcount % 1000 == 0:
                         await asyncio.sleep(3)
-                    if message.from_user.id in [5961091462, 277756078, 756558173, 126203394, 108918720]:
+                    if message.from_user and message.from_user.id in [5961091462, 277756078, 756558173, 126203394, 108918720]:
                         data = {
                             "user_id": message.from_user.id,
                             "chat_id": message.chat.id,
