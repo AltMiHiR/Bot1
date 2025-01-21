@@ -165,10 +165,10 @@ async def main():
                 print(f"ERROR_{type(e).__name__}", end=" ")
             if len(DATA) > 0:
                 await TrackDataCol.insert_many(DATA)
-                print(f"ADDED_{len(DATA)}_DOCS")
+                print(f"ADDED_{len(DATA)}_DOCS_OF_{previous_day.strftime('%d-%m-%Y')}")
                 DATA.clear()
             else:
-                print("ADDED_0_DOCS")
+                print(f"ADDED_0_DOCS_OF_{previous_day.strftime('%d-%m-%Y')}")
             now = datetime.now()
             await asyncio.sleep((60 - now.second) + ((59 - now.minute) * 60))
 
