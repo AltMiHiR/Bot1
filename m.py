@@ -124,6 +124,11 @@ async def main():
         else:
             is_not_first = True
 
+        today = datetime.now(IST)
+        previous_day = today - timedelta(days=1)
+        today = today.astimezone(IST).replace(hour=0, minute=0, second=0, microsecond=0)
+        previous_day = previous_day.astimezone(IST).replace(hour=0, minute=0, second=0, microsecond=0)
+
         for chat_id, chat_link in CHATS.items():
             # Joining Chat if not Joined
             try:
@@ -142,10 +147,9 @@ async def main():
                     print(f"Failed to Join: {type(e).__name__} ( {chat_link} )")
                     continue
             print(f"RUNNING {chat_id}...  {datetime.now(IST).strftime('%d-%m-%Y %H:%M:%S')}", end=" ")
-            previous_day = datetime.now() - timedelta(days=1)
             mcount = 0
             try:
-                async for message in app.search_messages(chat_id=chat_id, min_date=previous_day, max_date=datetime.now()):
+                async for message in app.search_messages(chat_id=chat_id, min_date=previous_day, max_date=today):
                     mcount += 1
                     if mcount % 1000 == 0:
                         await asyncio.sleep(3)
