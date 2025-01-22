@@ -121,7 +121,7 @@ async def main():
     print("USERBOT STARTED!\n")
 
     while True:
-        await asyncio.sleep(300)
+        await asyncio.sleep(1800)
 
         if len(DATA) > 0:
             data = DATA.copy_with_clear()
@@ -137,6 +137,7 @@ async def main():
 
 
 logging.getLogger("pyrogram").setLevel(logging.ERROR)
+logging.getLogger("asyncio").setLevel(logging.ERROR)
 
 loop = asyncio.get_event_loop()
 loop.run_until_complete(main())
