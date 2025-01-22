@@ -17,8 +17,8 @@ _mongo_async_ = AsyncIOMotorClient("mongodb+srv://MIHIRxKHUSHI:print('MIKU1311')
 TrackDataCol = _mongo_async_["MFBot"]['TrackData']
 
 ACCOUNT = {
-    "session": "BQGMcpgAjY5X0m8kJLmNGGTlpoVz9hoa3GBJfjPQnef6WZkn-rQ4GHPDUrdpGmXeRVop5qjacSU0jBGJd6SyLMZ-OOWJoSQIp2X0KUdIHcI2_gLSqZn8sQKUQ2EDSywYk3h-s0eLVmtakWzHi219srMZ4XWoayZufBqvb-bfCmZlkHn0jnmlYaJ2qti_oMkpx0Y7OPP2e-Z5F2qs8EcQb2TsXzgtijExd7IGEMu3oYG8Mcl2AE0E4iFzlu3wmBW7Uxq_J2Kz3WtzT-u5Ms10jAfHkhLuNZY9vlJVW9tdqKjGh6HT8Gv3HEEjUlGlJ_xbS8LvTnIlo42Ui1OZlaPkslVkluTVFQAAAAHMeMGEAA",
-    "phone_number": "+919761301924"
+      "session": "BQGMcpgAiz495Brqz0p2krN4kuGdj68KTccSsaNFfmwfqo3FacWLTWnaHSCW20K8eg6LdOB0rsagQNYVs6huDotVGBXtkZXcZOMPolSmd7tjk4eRQGqVe-YkMCnsN3GFgooQimOfkho3BttQ2cZKgKtTiWY3TjrnWzZw8jd0mr0CbAfXpiZPmV8J-XCRJoNX-AYYbXJK2ZJ9xnl3pUwH-xjYf_q94Uc9mQ3MueWKi5kYLX6hXMk86oqN_ImUcaVT3K3CzQWb_oZ4rjzslKGGj2MWv2ZogfGvoQC_eYD55FvmNV2lDLtpVXBdTFxppyo98gnaU2s2JiMK8fIXAsPjX_QU-gJe8wAAAAHaoqR0AA",
+      "phone_number": "+919759234857"
 }
 
 CHATS = {
